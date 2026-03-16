@@ -5,6 +5,7 @@ import 'package:vampire_survivors_flame/src/extensions/vector2_extension.dart';
 
 class WelcomeScreen extends Component with HasGameReference<MyGame> {
   final SpriteComponent _background = SpriteComponent();
+  final SpriteComponent _title = SpriteComponent();
 
   @override
   Future<void> onLoad() async {
@@ -16,6 +17,16 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
       ..size = bgSprite.srcSize.cover(game.size)
       ..position = (game.size - _background.size) / 2;
     add(_background);
+
+    final titleSprite = await Sprite.load('welcome_title.png');
+    _title
+      ..sprite = titleSprite
+      ..size = titleSprite.srcSize.contain(game.size * 0.8)
+      ..position = Vector2(
+        (game.size.x - _title.size.x) / 2,
+        game.size.y * 0.1,
+      );
+    add(_title);
   }
 
   @override
@@ -23,5 +34,7 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     super.onGameResize(size);
     _background.size = _background.size.cover(size);
     _background.position = (size - _background.size) / 2;
+    _title.size = _title.size.contain(size * 0.8);
+    _title.position = Vector2((size.x - _title.size.x) / 2, size.y * 0.1);
   }
 }
