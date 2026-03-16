@@ -1,7 +1,9 @@
 import 'package:flame/components.dart';
+import 'package:flame/post_process.dart';
 
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:vampire_survivors_flame/src/extensions/vector2_extension.dart';
+import 'package:vampire_survivors_flame/src/post_processes/pixelation_post_process.dart';
 
 class WelcomeScreen extends Component with HasGameReference<MyGame> {
   final SpriteComponent _background = SpriteComponent();
@@ -21,12 +23,13 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     final titleSprite = await Sprite.load('welcome_title.png');
     _title
       ..sprite = titleSprite
-      ..size = titleSprite.srcSize.contain(game.size * 0.8)
-      ..position = Vector2(
-        (game.size.x - _title.size.x) / 2,
-        game.size.y * 0.1,
-      );
-    add(_title);
+      ..size = titleSprite.srcSize.contain(game.size * 0.8);
+    final titleEffect = PostProcessComponent(
+      postProcess: PixelationPostProcess(),
+      position: Vector2((game.size.x - _title.size.x) / 2, game.size.y * 0.1),
+      children: [_title],
+    );
+    add(titleEffect);
   }
 
   @override
@@ -34,7 +37,7 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     super.onGameResize(size);
     _background.size = _background.size.cover(size);
     _background.position = (size - _background.size) / 2;
-    _title.size = _title.size.contain(size * 0.8);
-    _title.position = Vector2((size.x - _title.size.x) / 2, size.y * 0.1);
+    // _title.size = _title.size.contain(size * 0.8);
+    // _title.position = Vector2((size.x - _title.size.x) / 2, size.y * 0.1);
   }
 }
