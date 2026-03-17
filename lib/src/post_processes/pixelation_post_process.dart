@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame/post_process.dart';
 
