@@ -35,33 +35,4 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     );
     add(_titleEffect);
   }
-
-  @override
-  void onMount() {
-    super.onMount();
-
-    add(
-      TimerComponent(
-        period: 2,
-        repeat: false,
-        removeOnFinish: true,
-        onTick: _stopPixelation,
-      ),
-    );
-  }
-
-  void _stopPixelation() {
-    unawaited(_moveTitleOutOfEffect());
-  }
-
-  Future<void> _moveTitleOutOfEffect() async {
-    final titleWorldPosition = _title.absolutePosition.clone();
-
-    _title.position = titleWorldPosition;
-    _title.parent = this;
-
-    await game.lifecycleEventsProcessed;
-
-    _titleEffect.removeFromParent();
-  }
 }
