@@ -45,8 +45,13 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  shaders:
-    - shaders/pixelation.frag
-
   assets:
     - assets/images/
+
+  fonts:
+    - family: Perfect DOS VGA 437
+      fonts:
+        - asset: fonts/Perfect DOS VGA 437.ttf
+
+  shaders:
+    - shaders/pixelation.frag

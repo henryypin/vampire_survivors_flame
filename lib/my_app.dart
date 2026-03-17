@@ -37,6 +37,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(fontFamily: 'Perfect DOS VGA 437'),
       home: Scaffold(
         body: Column(
           children: [
