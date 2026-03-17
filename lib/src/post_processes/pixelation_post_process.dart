@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/image_composition.dart';
 import 'package:flame/post_process.dart';
 
 class PixelationPostProcess extends PostProcess {
@@ -30,11 +31,12 @@ class PixelationPostProcess extends PostProcess {
   @override
   void postProcess(Vector2 size, Canvas canvas) {
     final preRenderedSubtree = rasterizeSubtree();
+    final imageSize = preRenderedSubtree.size;
 
     _fragmentShader.setFloatUniforms((value) {
       value
-        ..setVector(size / (20 * sin(_time)))
-        ..setVector(size);
+        ..setVector(imageSize / (20 * sin(_time)))
+        ..setVector(imageSize);
     });
 
     _fragmentShader.setImageSampler(0, preRenderedSubtree);
