@@ -15,6 +15,8 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  final GlobalKey<RiverpodAwareGameWidgetState<MyGame>> _gameWidgetKey =
+      GlobalKey<RiverpodAwareGameWidgetState<MyGame>>();
   late final MyGame _game;
 
   @override
@@ -39,10 +41,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         body: Column(
           children: [
             Expanded(
-              child: RiverpodAwareGameWidget(
-                key: GlobalKey<RiverpodAwareGameWidgetState<MyGame>>(),
-                game: _game,
-              ),
+              child: RiverpodAwareGameWidget(key: _gameWidgetKey, game: _game),
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
