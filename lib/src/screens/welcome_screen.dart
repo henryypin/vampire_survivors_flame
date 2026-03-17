@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/post_process.dart';
-
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:vampire_survivors_flame/src/extensions/vector2_extension.dart';
 import 'package:vampire_survivors_flame/src/post_processes/pixelation_post_process.dart';
@@ -25,6 +26,7 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     final titleSprite = await Sprite.load('welcome_title.png');
     final titleSize = titleSprite.srcSize.contain(game.size * 0.8);
     _title = SpriteComponent(sprite: titleSprite, size: titleSize);
+
     _titleEffect = PostProcessComponent(
       postProcess: PixelationPostProcess(),
       size: titleSize,
@@ -32,5 +34,34 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
       children: [_title],
     );
     add(_titleEffect);
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+
+    add(
+      TimerComponent(
+        period: 2,
+        repeat: false,
+        removeOnFinish: true,
+        onTick: _stopPixelation,
+      ),
+    );
+  }
+
+  void _stopPixelation() {
+    unawaited(_moveTitleOutOfEffect());
+  }
+
+  Future<void> _moveTitleOutOfEffect() async {
+    final titleWorldPosition = _title.absolutePosition.clone();
+
+    _title.position = titleWorldPosition;
+    _title.parent = this;
+
+    await game.lifecycleEventsProcessed;
+
+    _titleEffect.removeFromParent();
   }
 }
