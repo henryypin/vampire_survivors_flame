@@ -9,6 +9,7 @@ import 'package:vampire_survivors_flame/src/post_processes/pixelation_post_proce
 class WelcomeScreen extends Component with HasGameReference<MyGame> {
   late SpriteComponent _background;
   late SpriteComponent _title;
+  late PixelationPostProcess _titlePixelationEffect;
   late PostProcessComponent<PixelationPostProcess> _titleEffect;
 
   @override
@@ -26,13 +27,28 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     final titleSprite = await Sprite.load('welcome_title.png');
     final titleSize = titleSprite.srcSize.contain(game.size * 0.8);
     _title = SpriteComponent(sprite: titleSprite, size: titleSize);
-
+    _titlePixelationEffect = PixelationPostProcess();
     _titleEffect = PostProcessComponent(
-      postProcess: PixelationPostProcess(),
+      postProcess: _titlePixelationEffect,
       size: titleSize,
       position: Vector2((game.size.x - titleSize.x) / 2, game.size.y * 0.1),
       children: [_title],
     );
     add(_titleEffect);
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    add(
+      TimerComponent(
+        period: 1.5,
+        repeat: false,
+        removeOnFinish: true,
+        onTick: () {
+          _titlePixelationEffect.setEnabled(false);
+        },
+      ),
+    );
   }
 }

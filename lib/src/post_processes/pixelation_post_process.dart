@@ -5,6 +5,9 @@ import 'package:flame/image_composition.dart';
 import 'package:flame/post_process.dart';
 
 class PixelationPostProcess extends PostProcess {
+  bool _enabled = true;
+  void setEnabled(bool value) => _enabled = value;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -34,7 +37,7 @@ class PixelationPostProcess extends PostProcess {
 
     _fragmentShader.setFloatUniforms((value) {
       value
-        ..setVector(imageSize / (20 * sin(_time)))
+        ..setVector(_enabled ? imageSize / (20 * cos(_time)) : imageSize)
         ..setVector(imageSize);
     });
 
