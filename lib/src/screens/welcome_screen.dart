@@ -5,6 +5,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/post_process.dart';
 import 'package:flame/text.dart';
+import 'package:flutter/widgets.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:vampire_survivors_flame/src/effects/blink_text_effect.dart';
 import 'package:vampire_survivors_flame/src/extensions/vector2_extension.dart';
@@ -17,7 +18,7 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
   late PostProcessComponent<PixelationPostProcess> _titleEffect;
   late TextComponent _pressToStart;
 
-  static const double _entranceAnimationDuration = 1.5;
+  static const double _entranceAnimationDuration = 1.0;
 
   @override
   Future<void> onLoad() async {
@@ -27,8 +28,19 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     _background = SpriteComponent(
       sprite: bgSprite,
       size: bgSprite.srcSize.cover(game.size),
+      anchor: Anchor.center,
     );
-    _background.position = (game.size - _background.size) / 2;
+    _background.position = game.size / 2;
+    _background.scale = Vector2.all(3.0);
+    _background.add(
+      ScaleEffect.to(
+        Vector2.all(1.0),
+        EffectController(
+          duration: _entranceAnimationDuration,
+          curve: Curves.fastEaseInToSlowEaseOut,
+        ),
+      ),
+    );
     add(_background);
 
     final titleSprite = await Sprite.load('welcome_title.png');
@@ -37,8 +49,9 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
     _titlePixelationEffect = PixelationPostProcess();
     _titleEffect = PostProcessComponent(
       postProcess: _titlePixelationEffect,
+      anchor: Anchor.center,
       size: titleSize,
-      position: Vector2((game.size.x - titleSize.x) / 2, game.size.y * 0.15),
+      position: Vector2(game.size.x / 2, game.size.y * 0.2),
       children: [_title],
     );
     add(_titleEffect);
@@ -52,11 +65,9 @@ class WelcomeScreen extends Component with HasGameReference<MyGame> {
           fontFamily: 'Perfect DOS VGA 437',
         ),
       ),
+      anchor: Anchor.center,
     );
-    _pressToStart.position = Vector2(
-      (game.size.x - _pressToStart.size.x) / 2,
-      game.size.y * 0.6,
-    );
+    _pressToStart.position = Vector2(game.size.x / 2, game.size.y * 0.6);
     _pressToStart.add(
       BlinkTextEffect(EffectController(duration: 1.0, infinite: true)),
     );
