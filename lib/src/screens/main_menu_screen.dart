@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vampire_survivors_flame/src/providers/game_state_provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:vampire_survivors_flame/src/widgets/tappable_text_component.dart';
@@ -33,7 +34,7 @@ class MainMenuScreen extends Component
       text: 'Start new game',
       textRenderer: renderer,
       onTap: () {
-        ref.read(gameStateProvider.notifier).state = GameState.playing;
+        ref.read(gameStateProvider.notifier).setGameState(GameState.playing);
       },
     );
 
