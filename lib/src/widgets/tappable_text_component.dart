@@ -22,6 +22,7 @@ class TappableTextComponent extends TextComponent with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
+    super.onTapDown(event);
     print("Tapped on $text !");
     onTap?.call();
   }
