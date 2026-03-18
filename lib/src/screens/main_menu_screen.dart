@@ -35,7 +35,7 @@ class MainMenuScreen extends Component
     );
 
     _settingsButton = TappableTextComponent(
-      text: 'Setting',
+      text: 'Settings',
       textRenderer: renderer,
       onTap: () {
         // go to setting (TBC)
