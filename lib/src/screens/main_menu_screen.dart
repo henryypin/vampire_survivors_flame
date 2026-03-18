@@ -2,82 +2,144 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flame/components.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vampire_survivors_flame/src/providers/game_state_provider.dart';
+import 'package:vampire_survivors_flame/src/widgets/tappable_text_button.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
-import 'package:vampire_survivors_flame/src/widgets/tappable_text_component.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
 
 class MainMenuScreen extends Component
     with HasGameReference<MyGame>, RiverpodComponentMixin {
 
-  late TextComponent _startButton;
-  late TextComponent _settingsButton;
-  late TextComponent _quitButton;
-
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    final textStyle = TextStyle(
-      fontSize: 48,
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
+    final quitButton = TappableTextButton(
+        text: TextComponent(
+          text: "QUIT",
+          textRenderer: TextPaint(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        backgroundColor: const Color(0xFFD32B0C),
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        position: Vector2(game.size.x * 0.1, game.size.y * 0.1),
+        anchor: Anchor.centerLeft,
+        onPressed: () async {
+          if (game.buildContext case final context?) {
+            final confirmed = await _showQuitDialog(context);
+            if (confirmed && isMounted) {
+              await _quitApplication();
+            }
+          }
+        }
     );
 
-    final renderer = TextPaint(style: textStyle);
+    add(quitButton);
 
-    _startButton = TappableTextComponent(
-      text: 'Start new game',
-      textRenderer: renderer,
-      onTap: () {
+    final optionsButton = TappableTextButton(
+        text: TextComponent(
+          text: "OPTIONS",
+          textRenderer: TextPaint(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        backgroundColor: const Color(0xFF2740CD),
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        position: Vector2(game.size.x * 0.9, game.size.y * 0.1),
+        anchor: Anchor.centerRight,
+    );
+
+    add(optionsButton);
+
+    final startButton = TappableTextButton(
+      text: TextComponent(
+        text: "START",
+        textRenderer: TextPaint(
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            shadows: [
+              Shadow(blurRadius: 4, color: Colors.black45, offset: Offset(2, 2)),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: const Color(0xFF2740CD),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      position: Vector2(game.size.x * 0.5, game.size.y * 0.65),
+      onPressed: () {
         ref.read(gameStateProvider.notifier).setGameState(GameState.playing);
       },
     );
 
-    _settingsButton = TappableTextComponent(
-      text: 'Settings',
-      textRenderer: renderer,
-      onTap: () {
-        // go to setting (TBC)
-      },
+    add(startButton);
+    
+    final powerUpButton = TappableTextButton(
+      text: TextComponent(
+        text: "POWER UP",
+        textRenderer: TextPaint(
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+      ),
+      backgroundColor: const Color(0xFF2E7D32),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      position: Vector2(game.size.x * 0.5, game.size.y * 0.85),
     );
 
-    _quitButton = TappableTextComponent(
-      text: 'Quit',
-      textRenderer: renderer,
-      onTap: () async {
-        if (game.buildContext case final context?) {
-          final confirmed = await _showQuitDialog(context);
-          if (confirmed && isMounted) {
-            await _quitApplication();
-          }
-        }
-      },
+    add(powerUpButton);
+
+    final collectionButton = TappableTextButton(
+      minWidth: 100,
+      text: TextComponent(
+        text: "COLLECTION",
+        textRenderer: TextPaint(
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+          ),
+        ),
+      ),
+      backgroundColor: const Color(0xFF2740CD),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      position: Vector2(0, game.size.y * 0.85),
+      anchor: Anchor.centerLeft,
     );
 
-    // Position them vertically centered
-    final spacing = 80.0;
-    final totalHeight = spacing * 2 + 48 * 3; // approx height of texts
-    final startY = (game.size.y - totalHeight) / 2;
+    add(collectionButton);
 
-    _startButton
-      ..anchor = Anchor.center
-      ..position = Vector2(game.size.x / 2, startY + 48);
+    final unlocksButton = TappableTextButton(
+      minWidth: 100,
+      text: TextComponent(
+        text: "UNLOCKS",
+        textRenderer: TextPaint(
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+          ),
+        ),
+      ),
+      backgroundColor: const Color(0xFF2740CD),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      position: Vector2(game.size.x, game.size.y * 0.85),
+      anchor: Anchor.centerRight,
+    );
 
-    _settingsButton
-      ..anchor = Anchor.center
-      ..position = Vector2(game.size.x / 2, startY + 48 + spacing);
-
-    _quitButton
-      ..anchor = Anchor.center
-      ..position = Vector2(game.size.x / 2, startY + 48 + spacing * 2);
-
-    addAll([_startButton, _settingsButton, _quitButton]);
-
+    add(unlocksButton);
   }
 
   Future<bool> _showQuitDialog(BuildContext context) async {
