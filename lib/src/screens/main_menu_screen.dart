@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flame/components.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:window_manager/window_manager.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:vampire_survivors_flame/src/widgets/tappable_text_component.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
@@ -49,7 +52,7 @@ class MainMenuScreen extends Component
         if (game.buildContext case final context?) {
           final confirmed = await _showQuitDialog(context);
           if (confirmed && isMounted) {
-            SystemNavigator.pop(); // Exit the app
+            await _quitApplication();
           }
         }
       },
@@ -95,5 +98,25 @@ class MainMenuScreen extends Component
       ),
     ) ??
         false;
+  }
+
+  Future<void> _quitApplication() async {
+    // Avoid using dart:io on web.
+    if (kIsWeb) {
+      // On web, typically let the user close the tab/window.
+      return;
+    }
+
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      // Use window_manager on desktop for consistent behavior.
+      if (await windowManager.isPreventClose()) {
+        await windowManager.destroy();
+      } else {
+        await windowManager.close();
+      }
+    } else {
+      // Mobile and other platforms: fall back to SystemNavigator.pop.
+      SystemNavigator.pop();
+    }
   }
 }
