@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vampire_survivors_flame/src/providers/game_state_provider.dart';
-import 'package:vampire_survivors_flame/src/widgets/tappable_text.dart';
+import 'package:vampire_survivors_flame/src/widgets/tappable_text_button.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
@@ -19,7 +19,7 @@ class MainMenuScreen extends Component
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    final quitButton = TappableText(
+    final quitButton = TappableTextButton(
         text: TextComponent(
           text: "QUIT",
           textRenderer: TextPaint(
@@ -45,7 +45,7 @@ class MainMenuScreen extends Component
 
     add(quitButton);
 
-    final optionsButton = TappableText(
+    final optionsButton = TappableTextButton(
         text: TextComponent(
           text: "OPTIONS",
           textRenderer: TextPaint(
@@ -63,7 +63,7 @@ class MainMenuScreen extends Component
 
     add(optionsButton);
 
-    final startButton = TappableText(
+    final startButton = TappableTextButton(
       text: TextComponent(
         text: "START",
         textRenderer: TextPaint(
@@ -86,7 +86,7 @@ class MainMenuScreen extends Component
 
     add(startButton);
     
-    final powerUpButton = TappableText(
+    final powerUpButton = TappableTextButton(
       text: TextComponent(
         text: "POWER UP",
         textRenderer: TextPaint(
@@ -103,7 +103,7 @@ class MainMenuScreen extends Component
 
     add(powerUpButton);
 
-    final collectionButton = TappableText(
+    final collectionButton = TappableTextButton(
       minWidth: 100,
       text: TextComponent(
         text: "COLLECTION",
@@ -122,7 +122,7 @@ class MainMenuScreen extends Component
 
     add(collectionButton);
 
-    final unlocksButton = TappableText(
+    final unlocksButton = TappableTextButton(
       minWidth: 100,
       text: TextComponent(
         text: "UNLOCKS",

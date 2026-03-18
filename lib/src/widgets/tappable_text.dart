@@ -28,7 +28,7 @@ class TappableText extends PositionComponent with TapCallbacks {
     this.padding = const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
     super.position,
     super.anchor = Anchor.center,
-  }) : super();
+  });
 
   @override
   Future<void> onLoad() async {
@@ -57,36 +57,19 @@ class TappableText extends PositionComponent with TapCallbacks {
     );
     canvas.drawRRect(rRect, paint);
 
-    // Draw border (optional)
+    // Draw border
     if (borderWidth > 0) {
       final borderPaint = Paint()
         ..color = borderColor
         ..style = PaintingStyle.stroke
         ..strokeWidth = borderWidth;
       canvas.drawRRect(rRect, borderPaint);
-
-      final shadowRRect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(borderWidth, borderWidth, size.x - borderWidth * 2, size.y - borderWidth * 2),
-        Radius.circular(cornerRadius),
-      );
-
-      final shadowPaint = Paint()
-        .. color = const Color(0x80000000)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 3.0;
-      canvas.drawRRect(shadowRRect, shadowPaint);
     }
-
-    // Children (text) are rendered automatically after background
   }
 
   @override
-  bool onTapDown(TapDownEvent event) {
-    print("onTapDown ${text.text}");
+  void onTapUp(TapUpEvent event) {
+    super.onTapUp(event);
     onPressed?.call();
-    // Optional: add pressed visual feedback (scale down, color change...)
-    scale = Vector2.all(0.92);
-    Future.delayed(const Duration(milliseconds: 80), () => scale = Vector2.all(1.0));
-    return true;
   }
 }
