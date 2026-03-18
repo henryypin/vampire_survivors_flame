@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:vampire_survivors_flame/src/widgets/tappable_text_component.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 
-class MainMenuScreen extends Component with HasGameReference<MyGame>{
+class MainMenuScreen extends Component
+    with HasGameReference<MyGame>, RiverpodComponentMixin {
 
   late TextComponent _startButton;
   late TextComponent _settingsButton;
@@ -28,7 +30,7 @@ class MainMenuScreen extends Component with HasGameReference<MyGame>{
       text: 'Start new game',
       textRenderer: renderer,
       onTap: () {
-        // go to game
+        ref.read(gameStateProvider.notifier).state = GameState.playing;
       },
     );
 
