@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'dart:async';
 
 class TappableTextComponent extends TextComponent with TapCallbacks {
 
-  final Function()? onTap;
+  final FutureOr<void> Function()? onTap;
 
   TappableTextComponent({
     this.onTap,
