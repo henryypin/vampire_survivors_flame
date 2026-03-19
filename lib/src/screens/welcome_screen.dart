@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
@@ -27,13 +25,11 @@ class WelcomeScreen extends PositionComponent
   static const double _entranceAnimationDuration = 1.0;
 
   @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-
+  void onLoad() {
     size = game.size;
     position = Vector2.zero();
 
-    final bgSprite = await Sprite.load('welcome_bg.png');
+    final bgSprite = Sprite(game.images.fromCache('welcome_bg.png'));
     _background = SpriteComponent(
       sprite: bgSprite,
       size: bgSprite.srcSize.cover(game.size),
@@ -52,7 +48,7 @@ class WelcomeScreen extends PositionComponent
     );
     add(_background);
 
-    final titleSprite = await Sprite.load('welcome_title.png');
+    final titleSprite = Sprite(game.images.fromCache('welcome_title.png'));
     final titleSize = titleSprite.srcSize.contain(game.size * 0.65);
     _title = SpriteComponent(sprite: titleSprite, size: titleSize);
     _titlePixelationEffect = PixelationPostProcess();
