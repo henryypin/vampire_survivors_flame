@@ -43,12 +43,6 @@ class HeroComponent extends SpriteAnimationGroupComponent<_HeroAnimationState>
     add(RectangleHitbox()..debugMode = true);
   }
 
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    position = game.size / 2;
-  }
-
   void move(Vector2 movement) {
     if (movement.isZero()) {
       stopMoving();
