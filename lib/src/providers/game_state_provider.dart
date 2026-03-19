@@ -2,13 +2,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_state_provider.g.dart';
 
-enum GameState { welcome, mainMenu, playing }
+enum GameState { loading, welcome, mainMenu, playing }
 
 @riverpod
 class GameStateNotifier extends _$GameStateNotifier {
   @override
   GameState build() {
-    return GameState.welcome;
+    return GameState.loading;
   }
 
   void setGameState(GameState newState) {

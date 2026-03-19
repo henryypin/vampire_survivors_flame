@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
-
 import 'package:vampire_survivors_flame/src/managers/screen_manager.dart';
 
 class MyGame extends FlameGame with RiverpodGameMixin {

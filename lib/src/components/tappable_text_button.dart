@@ -1,10 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'package:vampire_survivors_flame/src/widgets/tappable_text.dart';
+import 'package:vampire_survivors_flame/src/components/tappable_text.dart';
 
-class TappableTextButton extends TappableText{
-
+class TappableTextButton extends TappableText {
   TappableTextButton({
     required super.text,
     super.minWidth = 0,
@@ -26,12 +25,17 @@ class TappableTextButton extends TappableText{
     // print("render ${text.text}");
     super.render(canvas);
     final shadowRRect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(borderWidth, borderWidth, size.x - borderWidth * 2, size.y - borderWidth * 2),
+      Rect.fromLTWH(
+        borderWidth,
+        borderWidth,
+        size.x - borderWidth * 2,
+        size.y - borderWidth * 2,
+      ),
       Radius.circular(cornerRadius),
     );
 
     final shadowPaint = Paint()
-      .. color = const Color(0x80000000)
+      ..color = const Color(0x80000000)
       ..style = isTapping ? PaintingStyle.fill : PaintingStyle.stroke
       ..strokeWidth = 3.0;
     canvas.drawRRect(shadowRRect, shadowPaint);
