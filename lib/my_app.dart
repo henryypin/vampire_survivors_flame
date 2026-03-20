@@ -32,42 +32,28 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(fontFamily: 'Perfect DOS VGA 437'),
       home: Scaffold(
         backgroundColor: Colors.black,
-        body: Center(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: ColoredBox(
-              color: Colors.black,
-              child: SizedBox(
-                width: layout.totalSize.width,
-                height: layout.totalSize.height,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: layout.gameSize.width,
-                      height: layout.gameSize.height,
-                      child: RiverpodAwareGameWidget(
-                        key: _gameWidgetKey,
-                        game: _game,
-                      ),
-                    ),
-                    if (layout.bannerHeight > 0)
-                      SizedBox(
-                        width: layout.totalSize.width,
-                        height: layout.bannerHeight,
-                        child: const ColoredBox(
-                          color: Colors.black,
-                          child: Center(
-                            child: Text(
-                              'Ad',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+        body: ColoredBox(
+          color: Colors.black,
+          child: Column(
+            children: [
+              Expanded(
+                child: RiverpodAwareGameWidget(
+                  key: _gameWidgetKey,
+                  game: _game,
                 ),
               ),
-            ),
+              if (layout.bannerHeight > 0)
+                SizedBox(
+                  width: layout.totalSize.width,
+                  height: layout.bannerHeight,
+                  child: const ColoredBox(
+                    color: Colors.black,
+                    child: Center(
+                      child: Text('Ad', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ),
