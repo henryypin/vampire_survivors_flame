@@ -6,21 +6,21 @@ import 'package:flame/flame.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'package:vampire_survivors_flame/config.dart';
 import 'package:vampire_survivors_flame/my_app.dart';
+import 'package:vampire_survivors_flame/src/bootstrap/app_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final layout = await resolveAppLayout();
+  final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
   // Set up window manager for desktop platforms
-  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+  if (isDesktop) {
     await windowManager.ensureInitialized();
-    final totalHeight = gameHeight + bannerHeight;
-    final size = Size(gameWidth / 2, totalHeight / 2);
     WindowOptions windowOptions = WindowOptions(
-      size: size,
-      minimumSize: size,
-      maximumSize: Size(gameWidth, totalHeight),
+      size: layout.totalSize,
+      minimumSize: layout.totalSize,
+      maximumSize: layout.totalSize,
       center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
@@ -30,11 +30,13 @@ void main() async {
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
-      await windowManager.setAspectRatio(gameWidth / totalHeight);
+      await windowManager.setAspectRatio(layout.aspectRatio);
     });
   }
 
-  await Flame.device.fullScreen();
+  if (!isDesktop) {
+    await Flame.device.fullScreen();
+  }
 
-  runApp(ProviderScope(child: const MyApp()));
+  runApp(ProviderScope(child: MyApp(layout: layout)));
 }

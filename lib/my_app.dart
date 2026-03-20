@@ -1,20 +1,18 @@
-import 'package:flutter/material.dart';
-
 import 'package:flame_riverpod/flame_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:vampire_survivors_flame/config.dart';
+import 'package:flutter/material.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
-import 'package:vampire_survivors_flame/src/providers/ad_provider.dart';
+import 'package:vampire_survivors_flame/src/bootstrap/app_layout.dart';
 
-class MyApp extends ConsumerStatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({required this.layout, super.key});
+
+  final AppLayout layout;
 
   @override
-  ConsumerState<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> {
+class _MyAppState extends State<MyApp> {
   final GlobalKey<RiverpodAwareGameWidgetState<MyGame>> _gameWidgetKey =
       GlobalKey<RiverpodAwareGameWidgetState<MyGame>>();
   late final MyGame _game;
@@ -23,41 +21,40 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     _game = MyGame();
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      // Simulate ad loading after a delay
-      ref.read(adHeightProvider.notifier).setHeight(bannerHeight);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final adHeight = ref.watch(adHeightProvider);
+    final layout = widget.layout;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Perfect DOS VGA 437'),
       home: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: RiverpodAwareGameWidget(key: _gameWidgetKey, game: _game),
-            ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              width: double.infinity,
-              height: adHeight.clamp(0.0, bannerHeight),
-              color: Colors.black,
-              // Replace this child with your real BannerAdWidget
-              child: adHeight > 0
-                  ? const Center(
+        backgroundColor: Colors.black,
+        body: ColoredBox(
+          color: Colors.black,
+          child: Column(
+            children: [
+              Expanded(
+                child: RiverpodAwareGameWidget(
+                  key: _gameWidgetKey,
+                  game: _game,
+                ),
+              ),
+              if (layout.bannerHeight > 0)
+                SizedBox(
+                  width: layout.totalSize.width,
+                  height: layout.bannerHeight,
+                  child: const ColoredBox(
+                    color: Colors.black,
+                    child: Center(
                       child: Text('Ad', style: TextStyle(color: Colors.white)),
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
