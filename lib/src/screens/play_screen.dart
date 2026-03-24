@@ -1,21 +1,26 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame_tiled/flame_tiled.dart';
 import 'package:vampire_survivors_flame/my_game.dart';
 import 'package:vampire_survivors_flame/src/components/floating_joystick_component.dart';
 import 'package:vampire_survivors_flame/src/components/hero_component.dart';
 
 class PlayScreen extends World with HasGameReference<MyGame> {
+  late final TiledComponent _map;
   late final HeroComponent _player;
   late final FloatingJoystickComponent _joystick;
 
   @override
-  FutureOr<void> onLoad() {
+  FutureOr<void> onLoad() async {
     game.camera.world = this;
 
+    _map = await TiledComponent.load('map.tmx', Vector2.all(32), priority: -1);
+    await add(_map);
+
     _player = HeroComponent();
-    _player.position = game.size / 2;
-    add(_player);
+    _player.position = _map.size / 2;
+    await add(_player);
     game.camera.follow(_player, snap: true);
 
     _joystick = FloatingJoystickComponent();
